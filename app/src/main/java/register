@@ -1,0 +1,291 @@
+
+public class JoinActivity extends AppCompatActivity {
+    private static final String TEMP_PHOTO_FILE = "user.jpg"; // 임시 저장 파일명
+    private static final int PICK_FROM_GALLERY = 0;
+    private CropBitmap cropBitmap = new CropBitmap();
+
+    private String user_id;
+    private String user_pass;
+    private String user_name;
+    private String user_sex;
+    private String user_id_check;
+
+    private ImageView user_photo;
+
+    private EditText id;
+    private EditText password;
+    private EditText name;
+
+    private CheckBox join_sex_male;
+    private CheckBox join_sex_female;
+    private Button join_id_check;
+    private Button join_add;
+    private Button join_cancle;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        StrictMode.enableDefaults();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.join_layout);
+
+        id = (EditText) findViewById(R.id.join_id);
+        password = (EditText) findViewById(R.id.join_password);
+        name = (EditText) findViewById(R.id.join_name);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.drawer_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        user_photo = (ImageView) findViewById(R.id.join_user_photo);
+        FileOutputStream filestream = null;
+        try {
+            // 사용자가 이미지를 선택하지 않았을 때 업로드 할 이미지
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.mipmap.ic_no_user);
+            Bitmap bitmap = drawable.getBitmap();
+
+            File file = new File(Global.dirPath+"/user.jpg");
+            filestream = new FileOutputStream(file);
+
+            // bitmap을 file로 변환할 때의 형식 png로 지정
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, filestream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            if(filestream!=null) {
+                try {
+                    filestream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // 사용자의 이미지를 클릭해서 이미지를 설정하는 부분
+        user_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        Intent.ACTION_GET_CONTENT,      // 또는 ACTION_PICK
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");              // 모든 이미지
+                intent.putExtra("crop", "true");        // Crop기능 활성화
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());     // 임시파일 생성
+                intent.putExtra("outputFormat",         // 포맷방식
+                        Bitmap.CompressFormat.JPEG.toString());
+                startActivityForResult(intent, PICK_FROM_GALLERY);
+            }
+        });
+
+        join_id_check = (Button) findViewById(R.id.join_id_check);
+
+        // 중복 되는 id가 있는지 확인하는 부분
+        join_id_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userUrl = "http://192.168.187.171/scv/join_id_check_action.php";
+
+                user_id = id.getText().toString();
+                String body = "selected_id=" + user_id;
+
+                StringBuffer response = new StringBuffer();
+                URL url = null;
+
+                //  server의 DB에 id가 존재하는지 확인
+                try {
+                    url = new URL(userUrl);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+
+                    DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                    wr.writeBytes(body);
+                    wr.flush();
+                    wr.close();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String inputLine;
+                    String result="";
+
+                    while ((inputLine = in.readLine()) != null) {
+                        result+=inputLine;
+                    }
+                    in.close();
+
+                    user_id_check = result;
+
+                    // id edit box가 비어있을 때
+                    if(user_id.equals("")){
+                        Toast.makeText(JoinActivity.this, "아이디를 입력해주세요", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // id]가 DB에 존재할  때
+                        if (user_id_check.equals("duplicate")) {
+                            Toast.makeText(JoinActivity.this, "이 아이디는 이미 존재 합니다", Toast.LENGTH_SHORT).show();
+                        }
+                        // id가 DB에 존재하지 않을 때
+                        else if(user_id_check.equals("notduplicate")){
+                            Toast.makeText(JoinActivity.this,  "이 아이디를 사용하실 수 있습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    conn.disconnect();
+                }catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+        join_sex_male = (CheckBox) findViewById(R.id.join_sex_male);
+
+        // 성별을 정하는 체크박스( 남자 )
+        join_sex_male.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    join_sex_female.setChecked(false);
+                    user_sex = "ma";
+                } else {
+                    user_sex = null;
+                }
+            }
+        });
+
+        join_sex_female = (CheckBox) findViewById(R.id.join_sex_female);
+
+        // 성별을 정하는 체크박스( 여자 )
+        join_sex_female.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    join_sex_male.setChecked(false);
+                    user_sex = "fe";
+                }else {
+                    user_sex = null;
+                }
+            }
+        });
+
+        join_add = (Button) findViewById(R.id.Button_join_add);
+
+        // 회원가입 확인 버튼
+        join_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PHPDown_Thread video_upload_action;
+                user_id = id.getText().toString();
+                user_pass = password.getText().toString();
+                user_name = name.getText().toString();
+
+                //  비어있는 edit box가 존재하는지 확인
+                if(user_sex == null || user_id.equals("") || user_pass.equals("") || user_name.equals(""))
+                {
+                    Toast.makeText(JoinActivity.this, "빈칸을 모두 채워주세요", Toast.LENGTH_SHORT).show();
+                }
+                //  id의 중복을 확인 했는지 확인
+                else if(user_id_check.equals("duplicate")==true){
+                    Toast.makeText(JoinActivity.this, "중복확인을 해주세요", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    //  사용자가 기입한 정보를 server의 DB에 저장( id, name, sex, password )
+                    try {
+                        video_upload_action = new PHPDown_Thread("join_action",user_id, user_pass, user_name, user_sex);
+                        video_upload_action.run();
+                        video_upload_action.join();
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    Toast.makeText(JoinActivity.this, "다시 로그인을 해주세요", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+
+        join_cancle = (Button) findViewById(R.id.Button_join_cancle);
+
+        // 회원가입 취소 버튼( Activity 종료 )
+        join_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Toast.makeText(JoinActivity.this, "취소하였습니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    /** 임시 저장 파일의 경로를 반환 */
+    private Uri getTempUri() {
+        return Uri.fromFile(getTempFile());
+    }
+
+    /** 외장메모리에 임시 이미지 파일을 생성하여 그 파일의 경로를 반환  */
+    private File getTempFile() {
+        if (isSDCARDMOUNTED()) {
+            File f = new File(Environment.getExternalStorageDirectory()+"/CODE/", // 외장메모리 경로
+                    TEMP_PHOTO_FILE);
+            try {
+                f.createNewFile();      // 외장메모리에 user.jpg 파일 생성
+            } catch (IOException e) {
+            }
+            return f;
+        } else
+            return null;
+    }
+
+    /** SD카드가 마운트 되어 있는지 확인 */
+    private boolean isSDCARDMOUNTED() {
+        String status = Environment.getExternalStorageState();
+        if (status.equals(Environment.MEDIA_MOUNTED))
+            return true;
+
+        return false;
+    }
+
+    /** 다시 액티비티로 복귀하였을때 이미지를 셋팅 */
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageData) {
+        super.onActivityResult(requestCode, resultCode, imageData);
+
+        switch (requestCode) {
+            case PICK_FROM_GALLERY:
+                if (resultCode == RESULT_OK) {
+                    if (imageData != null) {
+                        String filePath = Environment.getExternalStorageDirectory()
+                                + "/CODE/user.jpg";
+
+                        // user.jpg파일을 Bitmap으로 디코딩한다.
+                        Bitmap selectedImage = BitmapFactory.decodeFile(filePath);
+
+                        // user.jpg파일을 이미지뷰에 씌운다.
+                        user_photo.setImageBitmap(cropBitmap.getCroppedBitmap(selectedImage));
+                    }
+                }
+                break;
+        }
+    }
+}
+

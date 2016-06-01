@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212121">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="40dp"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_account_circle_white_48dp"/>
+
+        <TextView
+            android:id="@+id/phoneName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="NAME"
+            android:textSize="20dp"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:id="@+id/phoneNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="000-0000-0000"
+            android:textSize="20dp"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="20dp"
+            android:text=" 00:00"
+            android:textColor="#ffffff"
+            android:textSize="25dp"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_call_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible">
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/button_receive_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_local_phone_white_24dp"
+            app:fab_colorNormal="#4CAF50"
+            app:fab_colorPressed="#388E3C"
+            app:fab_colorRipple="#4CAF50"
+            android:layout_marginLeft="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/button_exit_call_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_call_end_white_24dp"
+            app:fab_colorNormal="#F44336"
+            app:fab_colorPressed="#D84315"
+            app:fab_colorRipple="#F44336"
+            android:layout_marginRight="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_call_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/button_speaker"
+            android:drawableTop="@drawable/ic_volume_up_white_24dp"
+            android:text="스피커"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:background="#607D8B"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_exit_call_2"
+            android:drawableTop="@drawable/ic_call_end_white_24dp"
+            android:text="종료"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:background="#F44336"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!--<Button-->
+            <!--android:id="@+id/button_tts"-->
+            <!--android:drawableTop="@drawable/ic_mic_white_24dp"-->
+            <!--android:text="TTS"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="20dp"-->
+            <!--android:background="#607D8B"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:paddingBottom="10dp"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+    </LinearLayout>
+</RelativeLayout>

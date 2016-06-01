@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LotteSpec</string>
+    <string name="title_activity_vote">VoteActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_for_search_view">ForSearchViewActivity</string>
+    <string name="title_activity_speck_to_text">SpeckToText</string>
+</resources>
