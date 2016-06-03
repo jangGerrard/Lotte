@@ -3,6 +3,7 @@ package com.websocket.websocket;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Button sttBtn ;
     Button barcodeBtn;
     Button cartBtn;
+    Button newBarcodeBtn;
 
 
     @Override
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         sttBtn = (Button)findViewById(R.id.speak_to_text_search_btn);
         barcodeBtn = (Button)findViewById(R.id.barcode_search_btn);
         cartBtn = (Button)findViewById(R.id.cartBtn);
+        newBarcodeBtn = (Button) findViewById(R.id.new_barcode_search_btn);
                 //barcode_search_btn cartBtn speak_to_text_search_btn
         sttBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+        newBarcodeBtn.setOnClickListener(new View.OnClickListener(
+
+        ) {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Barcode2Activity.class);
                 startActivity(intent);
             }
         });

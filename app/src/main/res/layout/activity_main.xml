@@ -25,4 +25,10 @@
         android:layout_height="wrap_content"
         android:text="음성으로 물건 검색"/>
 
+    <Button
+        android:id="@+id/new_barcode_search_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="바코드로 물건 검색"/>
+
 </LinearLayout>

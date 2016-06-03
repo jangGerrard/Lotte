@@ -25,5 +25,6 @@ public class Global {
     public static SharedPreferences userIDPref;
     public static SharedPreferences.Editor editor;
     public static WebSocketClient mWebSocketClient = null;
-    public static String ip = "192.168.43.47";
+//    public static String ip = "192.168.43.47";
+    public static String ip = "192.168.0.17";
 }

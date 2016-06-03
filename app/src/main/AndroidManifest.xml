@@ -16,7 +16,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".TTS.TTSActivity" />
         <activity
             android:name=".TextToMorse.MorseActivity"
@@ -30,11 +35,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ForgotActivity"
@@ -121,7 +122,8 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".VoteActivity.ProductSearchListActivity" />
         <activity android:name=".CartActivity" />
-        <activity android:name=".BarcodeActivity"></activity>
+        <activity android:name=".BarcodeActivity" />
+        <activity android:name=".Barcode2Activity"></activity>
     </application>
 
 </manifest>
